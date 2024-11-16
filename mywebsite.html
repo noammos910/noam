@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Photo Calendar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    h1 {
+      margin-top: 20px;
+    }
+    .controls {
+      margin: 20px 0;
+    }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+      max-width: 700px;
+      margin: 20px auto;
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .calendar-header {
+      background-color: #6c63ff;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 16px;
+    }
+    .day {
+      background-color: #f5f5f5;
+      color: #333;
+      padding: 20px;
+      position: relative;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      border: 1px solid #ddd;
+    }
+    .day:nth-child(odd) {
+      background-color: #ffd700;
+    }
+    .day:nth-child(even) {
+      background-color: #00c1d4;
+    }
+    .day:hover {
+      background-color: #ff6f61;
+      transform: scale(1.1);
+      color: white;
+    }
+    .day-number {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s, opacity 0.3s;
+    }
+    .modal.active {
+      visibility: visible;
+      opacity: 1;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 500px;
+      text-align: left;
+    }
+    .modal img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 10px;
+    }
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Weekly Photo Calendar</h1>
+  <div class="controls">
+    <select id="monthSelector"></select>
+    <select id="yearSelector"></select>
+    <button onclick="generateCalendar()">Show Calendar</button>
+  </div>
+  <div class="calendar" id="calendar">
+    <!-- Calendar headers will be added here -->
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <button class="close" id="closeModal">×</button>
+    <div class="modal-content">
+      <img id="modalImage" src="" alt="Week Photo">
+      <p id="modalText"></p>
+    </div>
+  </div>
+
+  <script>
+    const calendar = document.getElementById('calendar');
+    const modal = document.getElementById('modal');
+    const closeModal = document.getElementById('closeModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalText = document.getElementById('modalText');
+    const monthSelector = document.getElementById('monthSelector');
+    const yearSelector = document.getElementById('yearSelector');
+
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    // Example weekly data
+    const weeksData = {
+      1: { img: 'https://www.dropbox.com/scl/fi/k5ocfypdxz04dhb9jpnxy/images.jpg?raw=1', text: 'This is the new photo and description for Week 1.' },
+      2: { img: 'https://via.placeholder.com/300?text=Week+2+Image', text: 'This is the photo and description for Week 2.' },
+      3: { img: 'https://via.placeholder.com/300?text=Week+3+Image', text: 'This is the photo and description for Week 3.' },
+      4: { img: 'https://via.placeholder.com/300?text=Week+4+Image', text: 'This is the photo and description for Week 4.' },
+      5: { img: 'https://via.placeholder.com/300?text=Week+5+Image', text: 'This is the photo and description for Week 5.' },
+    };
+
+    // Populate month and year selectors
+    const currentYear = 2024; // Set to start from November 2024
+    const currentMonth = 10; // 0-indexed, so 10 is November
+
+    for (let i = 0; i < months.length; i++) {
+      const option = document.createElement('option');
+      option.value = i;
+      option.textContent = months[i];
+      monthSelector.appendChild(option);
+    }
+    for (let i = currentYear - 50; i <= currentYear + 50; i++) {
+      const option = document.createElement('option');
+      option.value = i;
+      option.textContent = i;
+      yearSelector.appendChild(option);
+    }
+
+    monthSelector.value = currentMonth;
+    yearSelector.value = currentYear;
+
+    // Generate calendar for the selected month and year
+    function generateCalendar() {
+      const month = parseInt(monthSelector.value);
+      const year = parseInt(yearSelector.value);
+      calendar.innerHTML = '';
+
+      // Add headers for days of the week
+      ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
+        const header = document.createElement('div');
+        header.className = 'calendar-header';
+        header.textContent = day;
+        calendar.appendChild(header);
+      });
+
+      // Calculate the first day of the month and the number of days in the month
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      let weekNumber = 1;
+      let currentDay = 1;
+
+      // Add blank cells for the first empty days
+      for (let i = 0; i < firstDay; i++) {
+        const blank = document.createElement('div');
+        blank.className = 'day';
+        blank.style.visibility = 'hidden';
+        calendar.appendChild(blank);
+      }
+
+      // Add the actual days to the calendar
+      for (let i = 1; i <= daysInMonth; i++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'day';
+        dayDiv.innerHTML = `<div class="day-number">${i}</div>`;
+        dayDiv.onclick = () => openModal(weekNumber); // Open the modal for the corresponding week
+        calendar.appendChild(dayDiv);
+
+        // Increase the week number after each Saturday
+        if ((i + firstDay) % 7 === 0) {
+          weekNumber++;
+        }
+      }
+    }
+
+    // Open the modal with the photo and text for the selected week
+    function openModal(week) {
+      const weekData = weeksData[week];
+      if (weekData) {
+        modalImage.src = weekData.img;
+        modalText.textContent = weekData.text;
+      } else {
+        modalImage.src = '';
+        modalText.textContent = 'No data for this week.';
+      }
+      modal.classList.add('active');
+    }
+
+    // Close modal
+    closeModal.onclick = () => {
+      modal.classList.remove('active');
+    };
+
+    // Close modal when clicking outside
+    modal.onclick = (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    };
+
+    // Initialize the calendar when the page loads
+    generateCalendar();
+  </script>
+</body>
+</html>
