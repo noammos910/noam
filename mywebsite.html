@@ -141,11 +141,11 @@
 
     // Example weekly data
     const weeksData = {
-      1: { img: 'https://raw.githubusercontent.com/noammos910/noam/main/DSC_8988.jpg', text: 'This is the new photo and description for Week 1.' },
-      2: { img: 'https://via.placeholder.com/300?text=Week+2+Image', text: 'This is the photo and description for Week 2.' },
-      3: { img: 'https://via.placeholder.com/300?text=Week+3+Image', text: 'This is the photo and description for Week 3.' },
-      4: { img: 'https://via.placeholder.com/300?text=Week+4+Image', text: 'This is the photo and description for Week 4.' },
-      5: { img: 'https://via.placeholder.com/300?text=Week+5+Image', text: 'This is the photo and description for Week 5.' },
+      1: { img: 'https://via.placeholder.com/300?text=Week+1+Image', text: 'Description for Week 1.' },
+      2: { img: 'https://via.placeholder.com/300?text=Week+2+Image', text: 'Description for Week 2.' },
+      3: { img: 'https://via.placeholder.com/300?text=Week+3+Image', text: 'Description for Week 3.' },
+      4: { img: 'https://via.placeholder.com/300?text=Week+4+Image', text: 'Description for Week 4.' },
+      5: { img: 'https://via.placeholder.com/300?text=Week+5+Image', text: 'Description for Week 5.' },
     };
 
     // Populate month and year selectors
@@ -187,7 +187,6 @@
       const daysInMonth = new Date(year, month + 1, 0).getDate();
 
       let weekNumber = 1;
-      let currentDay = 1;
 
       // Add blank cells for the first empty days
       for (let i = 0; i < firstDay; i++) {
@@ -202,13 +201,14 @@
         const dayDiv = document.createElement('div');
         dayDiv.className = 'day';
         dayDiv.innerHTML = `<div class="day-number">${i}</div>`;
-        dayDiv.onclick = () => openModal(weekNumber); // Open the modal for the corresponding week
-        calendar.appendChild(dayDiv);
 
-        // Increase the week number after each Saturday
-        if ((i + firstDay) % 7 === 0) {
-          weekNumber++;
-        }
+        // Assign the correct week number based on the current day and first day of the month
+        const currentWeek = Math.ceil((i + firstDay) / 7);
+        
+        // Attach event to open modal with the corresponding week's data
+        dayDiv.onclick = () => openModal(currentWeek);
+
+        calendar.appendChild(dayDiv);
       }
     }
 
