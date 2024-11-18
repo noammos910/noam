@@ -5,104 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weekly Photo Calendar</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      background-color: #f4f4f4;
-      color: #333;
-    }
-    h1 {
-      margin-top: 20px;
-    }
-    .controls {
-      margin: 20px 0;
-    }
-    .calendar {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 1px;
-      max-width: 700px;
-      margin: 20px auto;
-      border-radius: 10px;
-      background: #fff;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-    }
-    .calendar-header {
-      background-color: #6c63ff;
-      color: white;
-      padding: 10px;
-      font-weight: bold;
-      text-align: center;
-      text-transform: uppercase;
-      font-size: 16px;
-    }
-    .day {
-      background-color: #f5f5f5;
-      color: #333;
-      padding: 20px;
-      position: relative;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-      border: 1px solid #ddd;
-    }
-    .day:nth-child(odd) {
-      background-color: #ffd700;
-    }
-    .day:nth-child(even) {
-      background-color: #00c1d4;
-    }
-    .day:hover {
-      background-color: #ff6f61;
-      transform: scale(1.1);
-      color: white;
-    }
-    .day-number {
-      font-size: 18px;
-      font-weight: bold;
-    }
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      visibility: hidden;
-      opacity: 0;
-      transition: visibility 0s, opacity 0.3s;
-    }
-    .modal.active {
-      visibility: visible;
-      opacity: 1;
-    }
-    .modal-content {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      max-width: 500px;
-      text-align: left;
-    }
-    .modal img {
-      max-width: 100%;
-      height: auto;
-      margin-bottom: 10px;
-    }
-    .close {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: none;
-      border: none;
-      color: white;
-      font-size: 20px;
-      cursor: pointer;
-    }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background-color: #f4f4f4; color: #333; }
+    h1 { margin-top: 20px; }
+    .controls { margin: 20px 0; }
+    .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; max-width: 700px; margin: 20px auto; border-radius: 10px; background: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden; }
+    .calendar-header { background-color: #6c63ff; color: white; padding: 10px; font-weight: bold; text-align: center; text-transform: uppercase; font-size: 16px; }
+    .day { background-color: #f5f5f5; color: #333; padding: 20px; position: relative; cursor: pointer; transition: background-color 0.3s ease, transform 0.3s ease; border: 1px solid #ddd; }
+    .day:nth-child(odd) { background-color: #ffd700; }
+    .day:nth-child(even) { background-color: #00c1d4; }
+    .day:hover { background-color: #ff6f61; transform: scale(1.1); color: white; }
+    .day-number { font-size: 18px; font-weight: bold; }
+    .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; visibility: hidden; opacity: 0; transition: visibility 0s, opacity 0.3s; }
+    .modal.active { visibility: visible; opacity: 1; }
+    .modal-content { background: white; padding: 20px; border-radius: 8px; max-width: 500px; text-align: left; }
+    .modal img { max-width: 100%; height: auto; margin-bottom: 10px; }
+    .close { position: absolute; top: 10px; right: 10px; background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -112,9 +29,7 @@
     <select id="yearSelector"></select>
     <button onclick="generateCalendar()">Show Calendar</button>
   </div>
-  <div class="calendar" id="calendar">
-    <!-- Calendar headers will be added here -->
-  </div>
+  <div class="calendar" id="calendar"></div>
 
   <!-- Modal -->
   <div class="modal" id="modal">
@@ -134,30 +49,19 @@
     const monthSelector = document.getElementById('monthSelector');
     const yearSelector = document.getElementById('yearSelector');
 
-    const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ];
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-    // Example weekly data
-    const weeksData = {
-      1: { img: 'https://t4.ftcdn.net/jpg/08/10/60/75/360_F_810607583_HPDXElwdpYZZPyJp9v0g7QCAJRDfRsBj.jpg', text: 'Description for Week 1.' },
-      2: { img: 'https://via.placeholder.com/300?text=Week+2+Image', text: 'Description for Week 2.' },
-      3: { img: 'https://via.placeholder.com/300?text=Week+3+Image', text: 'Description for Week 3.' },
-      4: { img: 'https://via.placeholder.com/300?text=Week+4+Image', text: 'Description for Week 4.' },
-      5: { img: 'https://via.placeholder.com/300?text=Week+5+Image', text: 'Description for Week 5.' },
-    };
+    const currentYear = 2024;
+    const currentMonth = 10;
 
-    // Populate month and year selectors
-    const currentYear = 2024; // Set to start from November 2024
-    const currentMonth = 10; // 0-indexed, so 10 is November
-
+    // Generate options for months and years
     for (let i = 0; i < months.length; i++) {
       const option = document.createElement('option');
       option.value = i;
       option.textContent = months[i];
       monthSelector.appendChild(option);
     }
+
     for (let i = currentYear - 50; i <= currentYear + 50; i++) {
       const option = document.createElement('option');
       option.value = i;
@@ -168,13 +72,96 @@
     monthSelector.value = currentMonth;
     yearSelector.value = currentYear;
 
-    // Generate calendar for the selected month and year
+    // Dynamic week data for each month
+    const weeksData = {
+      1: [
+        { img: 'https://via.placeholder.com/300?text=Week+1', text: 'Description for Week 1 of February.' },
+        { img: 'https://via.placeholder.com/300?text=Week+2', text: 'Description for Week 2 of February.' },
+        { img: 'https://via.placeholder.com/300?text=Week+3', text: 'Description for Week 3 of February.' },
+        { img: 'https://via.placeholder.com/300?text=Week+4', text: 'Description for Week 4 of February.' },
+        { img: 'https://via.placeholder.com/300?text=Week+5', text: 'Description for Week 5 of February.' }
+      ],
+      2: [
+        { img: 'https://via.placeholder.com/300?text=Week+1', text: 'Description for Week 1 of March.' },
+        { img: 'https://via.placeholder.com/300?text=Week+2', text: 'Description for Week 2 of March.' },
+        { img: 'https://via.placeholder.com/300?text=Week+3', text: 'Description for Week 3 of March.' },
+        { img: 'https://via.placeholder.com/300?text=Week+4', text: 'Description for Week 4 of March.' }
+      ],
+	  3: [
+        { img: 'https://via.placeholder.com/300?text=Week+1', text: 'Description for Week 1 of April.' },
+        { img: 'https://via.placeholder.com/300?text=Week+2', text: 'Description for Week 2 of April.' },
+        { img: 'https://via.placeholder.com/300?text=Week+3', text: 'Description for Week 3 of April.' },
+        { img: 'https://via.placeholder.com/300?text=Week+4', text: 'Description for Week 4 of April.' },
+        { img: 'https://via.placeholder.com/300?text=Week+5', text: 'Description for Week 5 of April.' }
+      ],
+      4: [
+        { img: 'https://via.placeholder.com/300?text=Week+1', text: 'Description for Week 1 of May.' },
+        { img: 'https://via.placeholder.com/300?text=Week+2', text: 'Description for Week 2 of May.' },
+        { img: 'https://via.placeholder.com/300?text=Week+3', text: 'Description for Week 3 of May.' },
+        { img: 'https://via.placeholder.com/300?text=Week+4', text: 'Description for Week 4 of May.' }
+      ],
+      5: [
+        { img: 'https://via.placeholder.com/300?text=Week+1', text: 'Description for Week 1 of January.' },
+        { img: 'https://via.placeholder.com/300?text=Week+2', text: 'Description for Week 2 of January.' },
+        { img: 'https://via.placeholder.com/300?text=Week+3', text: 'Description for Week 3 of January.' },
+        { img: 'https://via.placeholder.com/300?text=Week+4', text: 'Description for Week 4 of January.' }
+      ],
+	  6: [
+        { img: 'https://via.placeholder.com/300?text=Week+1', text: 'Description for Week 1 of July.' },
+        { img: 'https://via.placeholder.com/300?text=Week+2', text: 'Description for Week 2 of July.' },
+        { img: 'https://via.placeholder.com/300?text=Week+3', text: 'Description for Week 3 of July.' },
+        { img: 'https://via.placeholder.com/300?text=Week+4', text: 'Description for Week 4 of July.' },
+        { img: 'https://via.placeholder.com/300?text=Week+5', text: 'Description for Week 5 of July.' }
+      ],
+      7: [
+        { img: 'https://via.placeholder.com/300?text=Week+1', text: 'Description for Week 1 of August.' },
+        { img: 'https://via.placeholder.com/300?text=Week+2', text: 'Description for Week 2 of August.' },
+        { img: 'https://via.placeholder.com/300?text=Week+3', text: 'Description for Week 3 of August.' },
+        { img: 'https://via.placeholder.com/300?text=Week+4', text: 'Description for Week 4 of August.' }
+      ],
+	  8: [
+        { img: 'https://via.placeholder.com/300?text=Week+1', text: 'Description for Week 1 of September.' },
+        { img: 'https://via.placeholder.com/300?text=Week+2', text: 'Description for Week 2 of September.' },
+        { img: 'https://via.placeholder.com/300?text=Week+3', text: 'Description for Week 3 of September.' },
+        { img: 'https://via.placeholder.com/300?text=Week+4', text: 'Description for Week 4 of September.' },
+        { img: 'https://via.placeholder.com/300?text=Week+5', text: 'Description for Week 5 of September.' }
+      ],
+      9: [
+        { img: 'https://via.placeholder.com/300?text=Week+1', text: 'Description for Week 1 of October.' },
+        { img: 'https://via.placeholder.com/300?text=Week+2', text: 'Description for Week 2 of October.' },
+        { img: 'https://via.placeholder.com/300?text=Week+3', text: 'Description for Week 3 of October.' },
+        { img: 'https://via.placeholder.com/300?text=Week+4', text: 'Description for Week 4 of October.' }
+      ],
+      10: [
+        { img: 'https://via.placeholder.com/300?text=Week+1', text: 'Description for Week 1 of November.' },
+        { img: 'https://via.placeholder.com/300?text=Week+2', text: 'Description for Week 2 of November.' },
+        { img: 'https://via.placeholder.com/300?text=Week+3', text: 'Description for Week 3 of November.' },
+        { img: 'https://via.placeholder.com/300?text=Week+4', text: 'Description for Week 4 of November.' }
+      ],
+	  11: [
+        { img: 'https://via.placeholder.com/300?text=Week+1', text: 'Description for Week 1 of December.' },
+        { img: 'https://via.placeholder.com/300?text=Week+2', text: 'Description for Week 2 of December.' },
+        { img: 'https://via.placeholder.com/300?text=Week+3', text: 'Description for Week 3 of December.' },
+        { img: 'https://via.placeholder.com/300?text=Week+4', text: 'Description for Week 4 of December.' },
+        { img: 'https://via.placeholder.com/300?text=Week+5', text: 'Description for Week 5 of December.' }
+      ],
+      0: [
+        { img: 'https://via.placeholder.com/300?text=Week+1', text: 'Description for Week 1 of January.' },
+        { img: 'https://via.placeholder.com/300?text=Week+2', text: 'Description for Week 2 of January.' },
+        { img: 'https://via.placeholder.com/300?text=Week+3', text: 'Description for Week 3 of January.' },
+        { img: 'https://via.placeholder.com/300?text=Week+4', text: 'Description for Week 4 of January.' }
+      ],
+      // Add data for other months as needed
+    };
+
+    // Generate the calendar based on selected month and year
     function generateCalendar() {
       const month = parseInt(monthSelector.value);
       const year = parseInt(yearSelector.value);
+      const weeksInMonth = weeksData[month] || []; // Use empty array if no data
       calendar.innerHTML = '';
 
-      // Add headers for days of the week
+      // Create the day headers
       ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
         const header = document.createElement('div');
         header.className = 'calendar-header';
@@ -182,13 +169,10 @@
         calendar.appendChild(header);
       });
 
-      // Calculate the first day of the month and the number of days in the month
       const firstDay = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-      let weekNumber = 1;
-
-      // Add blank cells for the first empty days
+      // Add empty cells for the first week
       for (let i = 0; i < firstDay; i++) {
         const blank = document.createElement('div');
         blank.className = 'day';
@@ -201,20 +185,18 @@
         const dayDiv = document.createElement('div');
         dayDiv.className = 'day';
         dayDiv.innerHTML = `<div class="day-number">${i}</div>`;
+        const weekNumber = Math.ceil((i + firstDay) / 7); // Dynamically calculate week number
 
-        // Assign the correct week number based on the current day and first day of the month
-        const currentWeek = Math.ceil((i + firstDay) / 7);
-        
-        // Attach event to open modal with the corresponding week's data
-        dayDiv.onclick = () => openModal(currentWeek);
+        // Add event to open modal with the corresponding week's data
+        dayDiv.onclick = () => openModal(weekNumber, weeksInMonth);
 
         calendar.appendChild(dayDiv);
       }
     }
 
     // Open the modal with the photo and text for the selected week
-    function openModal(week) {
-      const weekData = weeksData[week];
+    function openModal(week, weeksInMonth) {
+      const weekData = weeksInMonth[week - 1]; // Adjust for zero-based index
       if (weekData) {
         modalImage.src = weekData.img;
         modalText.textContent = weekData.text;
@@ -225,17 +207,9 @@
       modal.classList.add('active');
     }
 
-    // Close modal
-    closeModal.onclick = () => {
-      modal.classList.remove('active');
-    };
-
-    // Close modal when clicking outside
-    modal.onclick = (e) => {
-      if (e.target === modal) {
-        modal.classList.remove('active');
-      }
-    };
+    // Close the modal
+    closeModal.onclick = () => modal.classList.remove('active');
+    modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('active'); };
 
     // Initialize the calendar when the page loads
     generateCalendar();
