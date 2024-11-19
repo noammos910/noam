@@ -2,29 +2,119 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>התמונה השבועית</title>
+  <!-- Add Suez One Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Suez+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Karantina:wght@300;400;700&family=Suez+One&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; background-color: #f4f4f4; color: #333; }
-    h1 { margin-top: 20px; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    h1 {
+        font-family: 'Suez One', serif;
+		font-size: 36px;  /* Large font size */
+        line-height: 1.8; /* More space between lines */
+        padding-top: 1px; /* Space above the text */
+        padding-bottom: 1px; /* Space below the text */
+    }
+h2 {
+        font-family: 'Karantina', cursive;
+        font-weight: 300;
+        line-height: 1.4;  /* Reduced line height to bring text closer to the next line */
+        padding-top: 0;    /* No top padding */
+        margin-top: 0;     /* No margin above the text */
+        position: relative;
+        top: -30px;         /* Moves the text 5px upwards */
+}
     .controls { margin: 10px 0; }
-    .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; max-width: 700px; margin: 20px auto; border-radius: 10px; background: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden; }
-    .calendar-header { background-color: #6c63ff; color: white; padding: 10px; font-weight: bold; text-align: center; text-transform: uppercase; font-size: 16px; }
-    .day { background-color: #f5f5f5; color: #333; padding: 20px; position: relative; cursor: pointer; transition: background-color 0.3s ease, transform 0.3s ease; border: 1px solid #ddd; }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+      max-width: 380px;
+      margin: 20px auto;
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .calendar-header {
+      background-color: #6c63ff;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 16px;
+    }
+    .day {
+      background-color: #f5f5f5;
+      color: #333;
+      padding: 10px;
+      position: relative;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      border: 1px solid #ddd;
+    }
     .day:nth-child(odd) { background-color: #ffd700; }
     .day:nth-child(even) { background-color: #00c1d4; }
-    .day:hover { background-color: #ff6f61; transform: scale(1.1); color: white; }
+    .day:hover {
+      background-color: #ff6f61;
+      transform: scale(1.1);
+      color: white;
+    }
     .day-number { font-size: 18px; font-weight: bold; }
-    .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; visibility: hidden; opacity: 0; transition: visibility 0s, opacity 0.3s; }
-    .modal.active { visibility: visible; opacity: 1; }
-    .modal-content { background: white; padding: 20px; border-radius: 8px; max-width: 500px; text-align: left; }
-    .modal img { max-width: 100%; height: auto; margin-bottom: 10px; }
-    .close { position: absolute; top: 10px; right: 10px; background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s, opacity 0.3s;
+    }
+    .modal.active {
+      visibility: visible;
+      opacity: 1;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 500px;
+      text-align: left;
+    }
+    .modal img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 10px;
+    }
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <h1 style="font-size:3vw">התמונה השבועית</h1>
-  <h2 style="font-size:1vw">בכל שבוע תוצג תמונה חדשה עם הסבר עליה</h1>
+  <h1>התמונה השבועית</h1>
+  <h2>בכל שבוע תוצג תמונה חדשה עם הסבר עליה</h2>
   <div class="controls">
     <select id="monthSelector"></select>
     <select id="yearSelector"></select>
