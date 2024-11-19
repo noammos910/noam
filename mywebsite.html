@@ -18,21 +18,35 @@
     }
     h1 {
         font-family: 'Suez One', serif;
-		font-size: 36px;  /* Large font size */
-        line-height: 1.8; /* More space between lines */
-        padding-top: 1px; /* Space above the text */
-        padding-bottom: 1px; /* Space below the text */
+        font-size: 36px;
+        line-height: 1.8;
+        padding-top: 1px;
+        padding-bottom: 1px;
     }
-h2 {
+    h2 {
         font-family: 'Karantina', cursive;
         font-weight: 300;
-        line-height: 1.4;  /* Reduced line height to bring text closer to the next line */
-        padding-top: 0;    /* No top padding */
-        margin-top: 0;     /* No margin above the text */
+        line-height: 1.4;
+        padding-top: 0;
+        margin-top: 0;
         position: relative;
-        top: -30px;         /* Moves the text 5px upwards */
-}
-    .controls { margin: 10px 0; }
+        top: -30px;
+    }
+    #yearSelector {
+        position: relative;
+        top: -30px;
+    }
+    #monthSelector {
+        position: relative;
+        top: -30px;
+    }
+	button {
+        position: relative;
+        top: -30px;
+    }
+    .controls { 
+        margin: 10px 0; 
+    }
     .calendar {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
@@ -43,6 +57,8 @@ h2 {
       background: #fff;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       overflow: hidden;
+	        position: relative;
+        top: -30px;
     }
     .calendar-header {
       background-color: #6c63ff;
@@ -110,17 +126,22 @@ h2 {
       font-size: 20px;
       cursor: pointer;
     }
+  img {
+      position: relative;
+      top: -30px;
+  }
   </style>
 </head>
 <body>
   <h1>התמונה השבועית</h1>
-  <h2>בכל שבוע תוצג תמונה חדשה עם הסבר עליה</h2>
+  <h2>בכל שבוע תוצג תמונה חדשה עם הסבר עליה, לחצו על היום הנוכחי ותראו את התמונה העדכנית ביותר</h2>
   <div class="controls">
     <select id="monthSelector"></select>
     <select id="yearSelector"></select>
     <button onclick="generateCalendar()">הצגת התמונה</button>
   </div>
   <div class="calendar" id="calendar"></div>
+    <img src="file:///C:/Users/noamm/Pictures/iCloud%20Photos/Photos/IMG_00703.JPG" alt="HTML5 Icon" width="128" height="72">
 
   <!-- Modal -->
   <div class="modal" id="modal">
